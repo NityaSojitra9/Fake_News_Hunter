@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - FakeNewsHunter{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">My Profile</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-4 text-center">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" 
+                                 class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                 style="width: 150px; height: 150px;">
+                                <i class="fas fa-user text-white" style="font-size: 3rem;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h5>{{ user.profile.display_name }}</h5>
+                        <p class="text-muted">@{{ user.username }}</p>
+                        <p class="text-muted">{{ user.email }}</p>
+                        {% if user.profile.bio %}
+                            <p>{{ user.profile.bio }}</p>
+                        {% endif %}
+                        <p class="text-muted small">Member since {{ user.date_joined|date:"F Y" }}</p>
+                    </div>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                        {{ form.full_name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.bio.id_for_label }}" class="form-label">Bio</label>
+                        {{ form.bio }}
+                        <div class="form-text">Tell us a bit about yourself (optional)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">Profile Picture</label>
+                        {{ form.profile_picture }}
+                        <div class="form-text">Upload a profile picture (optional)</div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

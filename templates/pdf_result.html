@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis Result PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        .header { background: #0d6efd; color: #fff; padding: 10px; border-radius: 8px 8px 0 0; }
+        .section { margin-bottom: 16px; }
+        .label { font-weight: bold; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; background: #6c757d; color: #fff; font-size: 12px; }
+        .content { white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>FakeNewsHunter - Analysis Result</h2>
+    </div>
+    <div class="section">
+        <span class="label">Title:</span> {{ analysis.title }}<br>
+        <span class="label">URL:</span> {{ analysis.url }}<br>
+        <span class="label">Source:</span> {{ analysis.source_domain }}<br>
+        <span class="label">Prediction:</span> <span class="badge">{{ analysis.prediction }}</span><br>
+        <span class="label">Confidence:</span> {{ analysis.confidence|floatformat:2 }}%<br>
+        <span class="label">Sentiment:</span> {{ analysis.sentiment }}<br>
+        <span class="label">Sentiment Score:</span> {{ analysis.sentiment_score|floatformat:2 }}<br>
+        <span class="label">Entities:</span> {{ analysis.entities }}<br>
+        <span class="label">Trust Score:</span> {{ analysis.trust_score }}<br>
+    </div>
+    <div class="section">
+        <span class="label">Content:</span>
+        <div class="content">{{ analysis.content }}</div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to FakeNewsHunter{% endblock %}
+
+{% block content %}
+<!-- Minimal Navbar for Landing Page -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'landing' %}">
+            <i class="fas fa-shield-alt me-2"></i>FakeNewsHunter
+        </a>
+        <div class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+                <a class="nav-link" href="{% url 'home' %}">
+                    <i class="fas fa-home me-1"></i>Go to App
+                </a>
+                <a class="nav-link" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </a>
+            {% else %}
+                <a class="nav-link" href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt me-1"></i>Sign In
+                </a>
+                <a class="nav-link" href="{% url 'register' %}">
+                    <i class="fas fa-user-plus me-1"></i>Sign Up
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="row min-vh-100 align-items-center bg-gradient-primary text-white">
+        <div class="col-lg-6">
+            <div class="px-4">
+                <h1 class="display-4 fw-bold mb-4">FakeNewsHunter</h1>
+                <p class="lead mb-4">Detect fake news articles using advanced Machine Learning and Natural Language Processing. Get instant analysis of news credibility with our AI-powered platform.</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'login' %}" class="btn btn-light btn-lg px-4">Sign In</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg px-4">Create Account</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div class="p-4">
+                <i class="fas fa-shield-alt text-white" style="font-size: 8rem; opacity: 0.8;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row py-5 bg-light">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold">Why Choose FakeNewsHunter?</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-robot text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">AI-Powered Analysis</h5>
+                    <p class="card-text">Advanced machine learning algorithms analyze article content, sentiment, and source credibility to detect fake news.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-chart-line text-success mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">Real-time Results</h5>
+                    <p class="card-text">Get instant analysis results with confidence scores, sentiment analysis, and detailed breakdowns.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-history text-info mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">Personalized History</h5>
+                    <p class="card-text">Save and track your analysis history with personalized statistics and filtering options.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="row py-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold">How It Works</h2>
+        </div>
+        <div class="col-md-3 text-center mb-4">
+            <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <span class="fw-bold">1</span>
+            </div>
+            <h5>Enter URL</h5>
+            <p class="text-muted">Paste the URL of any news article you want to analyze</p>
+        </div>
+        <div class="col-md-3 text-center mb-4">
+            <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <span class="fw-bold">2</span>
+            </div>
+            <h5>AI Analysis</h5>
+            <p class="text-muted">Our AI analyzes content, sentiment, and source credibility</p>
+        </div>
+        <div class="col-md-3 text-center mb-4">
+            <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <span class="fw-bold">3</span>
+            </div>
+            <h5>Get Results</h5>
+            <p class="text-muted">Receive detailed analysis with confidence scores</p>
+        </div>
+        <div class="col-md-3 text-center mb-4">
+            <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                <span class="fw-bold">4</span>
+            </div>
+            <h5>Track History</h5>
+            <p class="text-muted">Save and review your analysis history</p>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row py-5 bg-primary text-white">
+        <div class="col-12 text-center">
+            <h2 class="display-6 fw-bold mb-4">Ready to Start?</h2>
+            <p class="lead mb-4">Join thousands of users who trust FakeNewsHunter for reliable news analysis</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'register' %}" class="btn btn-light btn-lg px-4">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+</style>
+{% endblock %} 

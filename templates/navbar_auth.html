@@ -1,0 +1,30 @@
+<!-- Authentication Navbar for Login/Register pages -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="{% url 'landing' %}">
+            <i class="fas fa-shield-alt me-2"></i>FakeNewsHunter
+        </a>
+
+        <!-- Toggler for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#authNavbar" aria-controls="authNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation items -->
+        <div class="collapse navbar-collapse" id="authNavbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Sign In
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'register' %}">
+                        <i class="fas fa-user-plus me-1"></i>Sign Up
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

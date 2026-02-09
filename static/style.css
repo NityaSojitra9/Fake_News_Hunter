@@ -1,0 +1,56 @@
+/* Custom styles for FakeNewsHunter */
+body {
+    background: #f8f9fa;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.card-header {
+    border-radius: 1rem 1rem 0 0;
+}
+
+footer.footer {
+    width: 100%;
+    font-size: 0.95rem;
+    background: #212529;
+    color: #adb5bd;
+}
+
+.btn-primary, .btn-success, .btn-info {
+    border-radius: 2rem;
+    font-weight: 500;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.alert-info {
+    border-radius: 0.5rem;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+@media (max-width: 767.98px) {
+    .card {
+        border-radius: 0.5rem;
+    }
+    .card-header {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    .footer {
+        font-size: 0.85rem;
+        padding: 0.5rem 0;
+    }
+    .container, .container-fluid {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+} 

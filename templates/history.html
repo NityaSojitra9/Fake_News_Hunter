@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}My Analyses - FakeNewsHunter{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card shadow-lg p-4 border-0">
+            <div class="card-header bg-gradient bg-info text-white d-flex flex-column flex-md-row align-items-md-center justify-content-between rounded-3 mb-3 border-0">
+                <h3 class="mb-2 mb-md-0">{% if user.is_staff or user.is_superuser %}All Analyses{% else %}My Analyses{% endif %}</h3>
+                <div>
+                    <a href="?" class="btn btn-outline-secondary btn-sm me-2 mb-2">All</a>
+                    <a href="?filter=Real" class="btn btn-outline-success btn-sm me-2 mb-2">Real</a>
+                    <a href="?filter=Fake" class="btn btn-outline-danger btn-sm mb-2">Fake</a>
+                    <a href="{% url 'clear_history' %}" class="btn btn-outline-danger btn-sm mb-2 ms-md-3" onclick="return confirm('{% if user.is_staff or user.is_superuser %}Are you sure you want to clear ALL analyses from ALL users?{% else %}Are you sure you want to clear your analysis history?{% endif %}');">{% if user.is_staff or user.is_superuser %}Clear All{% else %}Clear My History{% endif %}</a>
+                </div>
+                <div class="mt-2 mt-md-0">
+                    <span class="badge bg-secondary me-1">Total: {{ stats.total }}</span>
+                    <span class="badge bg-success me-1">Real: {{ stats.real }}</span>
+                    <span class="badge bg-danger">Fake: {{ stats.fake }}</span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Prediction</th>
+                                <th>Sentiment</th>
+                                <th>Confidence</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for analysis in analyses %}
+                        <tr class="align-middle">
+                            <td class="fw-semibold">{{ analysis.title }}</td>
+                            <td>
+                                <span class="badge px-3 py-2 bg-{% if analysis.prediction == 'Real' %}success{% else %}danger{% endif %}">
+                                    {{ analysis.prediction }}
+                                </span>
+                            </td>
+                            <td>{{ analysis.sentiment }}</td>
+                            <td>{{ analysis.confidence|floatformat:2 }}%</td>
+                            <td>{{ analysis.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                    <a href="{% url 'result' analysis.pk %}" class="btn btn-sm btn-info">View</a>
+                                    <a href="{% url 'download_result' analysis.pk %}" class="btn btn-sm btn-outline-primary">Download</a>
+                                    <a href="{% url 'delete_analysis' analysis.pk %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this analysis?');">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center text-muted">No analyses found.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

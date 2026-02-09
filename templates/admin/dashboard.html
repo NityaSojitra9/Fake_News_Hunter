@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - FakeNewsHunter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <main class="px-4">
+<!-- Header Section -->
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-4 mb-4 border-bottom">
+    <div>
+        <h1 class="h2 mb-0">
+            <i class="fas fa-tachometer-alt me-2 text-primary"></i>Admin Dashboard
+        </h1>
+        <p class="text-muted mb-0">Monitor your fake news detection platform</p>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{% url 'admin_analyses' %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-chart-line me-1"></i>View All Analyses
+            </a>
+            <a href="{% url 'admin_users' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-users me-1"></i>Manage Users
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics Section -->
+<div class="row mb-5">
+    <div class="col-12 mb-3">
+        <h4 class="text-dark font-weight-bold">
+            <i class="fas fa-chart-bar me-2"></i>Key Metrics
+        </h4>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card border-0 shadow-sm h-100 hover-lift">
+            <div class="card-body text-center p-4">
+                <div class="metric-icon mb-3">
+                    <i class="fas fa-newspaper fa-3x text-primary"></i>
+                </div>
+                <h3 class="metric-number text-dark font-weight-bold mb-1">{{ total_analyses }}</h3>
+                <p class="metric-label text-muted mb-0 text-uppercase small font-weight-bold">Total Analyses</p>
+                <div class="metric-border bg-primary"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card border-0 shadow-sm h-100 hover-lift">
+            <div class="card-body text-center p-4">
+                <div class="metric-icon mb-3">
+                    <i class="fas fa-users fa-3x text-success"></i>
+                </div>
+                <h3 class="metric-number text-dark font-weight-bold mb-1">{{ total_users }}</h3>
+                <p class="metric-label text-muted mb-0 text-uppercase small font-weight-bold">Total Users</p>
+                <div class="metric-border bg-success"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card border-0 shadow-sm h-100 hover-lift">
+            <div class="card-body text-center p-4">
+                <div class="metric-icon mb-3">
+                    <i class="fas fa-shield-alt fa-3x text-info"></i>
+                </div>
+                <h3 class="metric-number text-dark font-weight-bold mb-1">{{ real_count }}</h3>
+                <p class="metric-label text-muted mb-0 text-uppercase small font-weight-bold">Real News Detected</p>
+                <div class="metric-border bg-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card metric-card border-0 shadow-sm h-100 hover-lift">
+            <div class="card-body text-center p-4">
+                <div class="metric-icon mb-3">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                </div>
+                <h3 class="metric-number text-dark font-weight-bold mb-1">{{ fake_count }}</h3>
+                <p class="metric-label text-muted mb-0 text-uppercase small font-weight-bold">Fake News Detected</p>
+                <div class="metric-border bg-warning"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Section -->
+<div class="row mb-5">
+    <div class="col-12 mb-3">
+        <h4 class="text-dark font-weight-bold">
+            <i class="fas fa-analytics me-2"></i>Analytics Overview
+        </h4>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="card modern-card border-0 shadow-sm h-100">
+            <div class="card-header bg-gradient-primary text-white border-0 py-3">
+                <h5 class="mb-0 font-weight-bold">
+                    <i class="fas fa-chart-pie me-2"></i>Analysis Distribution
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span class="font-weight-bold">Real News</span>
+                        </div>
+                        <span class="badge bg-success font-size-sm">{{ real_count }} articles</span>
+                    </div>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                             data-width="{{ real_percentage }}" style="border-radius: 6px;"></div>
+                    </div>
+                    <small class="text-muted">{{ real_percentage }}% of total</small>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <span class="font-weight-bold">Fake News</span>
+                        </div>
+                        <span class="badge bg-danger font-size-sm">{{ fake_count }} articles</span>
+                    </div>
+                    <div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated" 
+                             data-width="{{ fake_percentage }}" style="border-radius: 6px;"></div>
+                    </div>
+                    <small class="text-muted">{{ fake_percentage }}% of total</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card modern-card border-0 shadow-sm h-100">
+            <div class="card-header bg-gradient-info text-white border-0 py-3">
+                <h5 class="mb-0 font-weight-bold">
+                    <i class="fas fa-clock me-2"></i>Recent Activity
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-primary text-white rounded-circle me-3">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">{{ recent_analyses }} analyses</h6>
+                        <small class="text-muted">in the last {{ days }} days</small>
+                    </div>
+                </div>
+                <div class="activity-item d-flex align-items-center mb-3">
+                    <div class="activity-icon bg-success text-white rounded-circle me-3">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">{{ total_users }} total users</h6>
+                        <small class="text-muted">registered on platform</small>
+                    </div>
+                </div>
+                <div class="activity-item d-flex align-items-center">
+                    <div class="activity-icon bg-info text-white rounded-circle me-3">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1">{{ total_analyses }} total analyses</h6>
+                        <small class="text-muted">processed to date</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Performers Section -->
+<div class="row mb-5">
+    <div class="col-12 mb-3">
+        <h4 class="text-dark font-weight-bold">
+            <i class="fas fa-trophy me-2"></i>Top Performers
+        </h4>
+    </div>
+    
+    <div class="col-lg-8 mx-auto mb-4">
+        <div class="card modern-card border-0 shadow-sm h-100">
+            <div class="card-header bg-gradient-success text-white border-0 py-3">
+                <h5 class="mb-0 font-weight-bold">
+                    <i class="fas fa-user-star me-2"></i>Most Active Users
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0 px-4 py-3">
+                                    <i class="fas fa-hashtag me-1"></i>Rank
+                                </th>
+                                <th class="border-0 px-4 py-3">User</th>
+                                <th class="border-0 px-4 py-3 text-center">Analyses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in top_users %}
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <span class="badge bg-primary rounded-pill">{{ forloop.counter }}</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user text-muted me-2"></i>
+                                        <span class="font-weight-bold">{{ user.username }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="badge bg-success">{{ user.analysis_count }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+// Set progress bar widths from data attributes
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+    progressBars.forEach(function(bar) {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width + '%';
+    });
+});
+</script>
+
+<style>
+/* Modern Dashboard Styles */
+.metric-card {
+    transition: all 0.3s ease;
+    border-radius: 15px !important;
+    overflow: hidden;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.metric-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.metric-icon {
+    opacity: 0.8;
+}
+
+.metric-border {
+    height: 4px;
+    width: 100%;
+    border-radius: 2px;
+    margin-top: 15px;
+}
+
+.modern-card {
+    border-radius: 15px !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.modern-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df, #6f84f4) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #1cc88a, #36d9ac) !important;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #36b9cc, #5ad3e8) !important;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(45deg, #f6c23e, #fdd560) !important;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.progress {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 1s ease-in-out;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+/* Header improvements */
+.border-bottom {
+    border-color: #e3e6f0 !important;
+}
+
+/* Card header gradients */
+.card-header.bg-gradient-primary,
+.card-header.bg-gradient-success,
+.card-header.bg-gradient-info,
+.card-header.bg-gradient-warning {
+    border: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .metric-number {
+        font-size: 2rem;
+    }
+    
+    .activity-icon {
+        width: 35px;
+        height: 35px;
+    }
+}
+</style>
+    </main>
+</div>
+{% endblock %} 

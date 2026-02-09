@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Analyses - FakeNewsHunter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <main class="px-4">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">All Article Analyses</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <span class="badge bg-secondary">{{ total_count }} total analyses</span>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0">Filters</h6>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-2">
+                <label class="form-label">Prediction</label>
+                <select name="prediction" class="form-select">
+                    <option value="">All</option>
+                    <option value="Real" {% if prediction_filter == 'Real' %}selected{% endif %}>Real</option>
+                    <option value="Fake" {% if prediction_filter == 'Fake' %}selected{% endif %}>Fake</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Sentiment</label>
+                <select name="sentiment" class="form-select">
+                    <option value="">All</option>
+                    <option value="Positive" {% if sentiment_filter == 'Positive' %}selected{% endif %}>Positive</option>
+                    <option value="Negative" {% if sentiment_filter == 'Negative' %}selected{% endif %}>Negative</option>
+                    <option value="Neutral" {% if sentiment_filter == 'Neutral' %}selected{% endif %}>Neutral</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">User</label>
+                <input type="text" name="user" class="form-control" value="{{ user_filter }}" placeholder="Username">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Date From</label>
+                <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Date To</label>
+                <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{% url 'admin_analyses' %}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Analyses Table -->
+<div class="card">
+    <div class="card-header">
+        <h6 class="mb-0">Analyses</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>User</th>
+                        <th>Prediction</th>
+                        <th>Confidence</th>
+                        <th>Sentiment</th>
+                        <th>Domain</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for analysis in page_obj %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'result' analysis.pk %}" class="text-decoration-none">
+                                {{ analysis.title|truncatechars:50 }}
+                            </a>
+                        </td>
+                        <td>{{ analysis.user.username|default:"Anonymous" }}</td>
+                        <td>
+                            <span class="badge {% if analysis.prediction == 'Real' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ analysis.prediction }}
+                            </span>
+                        </td>
+                        <td>{{ analysis.confidence|floatformat:1 }}%</td>
+                        <td>{{ analysis.sentiment }}</td>
+                        <td>{{ analysis.source_domain }}</td>
+                        <td>{{ analysis.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'result' analysis.pk %}" class="btn btn-outline-primary btn-sm">View</a>
+                                <a href="{% url 'download_result' analysis.pk %}" class="btn btn-outline-secondary btn-sm">Download</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No analyses found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav aria-label="Analyses pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if prediction_filter %}&prediction={{ prediction_filter }}{% endif %}{% if sentiment_filter %}&sentiment={{ sentiment_filter }}{% endif %}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if prediction_filter %}&prediction={{ prediction_filter }}{% endif %}{% if sentiment_filter %}&sentiment={{ sentiment_filter }}{% endif %}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if prediction_filter %}&prediction={{ prediction_filter }}{% endif %}{% if sentiment_filter %}&sentiment={{ sentiment_filter }}{% endif %}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+    </main>
+</div>
+{% endblock %} 

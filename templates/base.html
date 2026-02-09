@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FakeNewsHunter{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    {% if request.resolver_match.url_name != 'landing' %}
+        {% if user.is_authenticated %}
+            {% if user.is_superuser or user.is_staff %}
+                {% include 'navbar_admin.html' %}
+            {% else %}
+                {% include 'navbar_user.html' %}
+            {% endif %}
+        {% else %}
+            {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}
+                {% include 'navbar_auth.html' %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    <main class="flex-shrink-0">
+        {% if request.resolver_match.url_name != 'landing' %}
+        <div class="container mt-4">
+        {% endif %}
+            {% if messages %}
+            <div aria-live="polite" aria-atomic="true" class="position-relative">
+                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+                    {% for message in messages %}
+                    <div class="toast align-items-center text-bg-{{ message.tags }} border-0 show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <div id="spinner-overlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);z-index:2000;align-items:center;justify-content:center;">
+                <div class="spinner-border text-primary" style="width:4rem;height:4rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+        {% if request.resolver_match.url_name != 'landing' %}
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white-50">
+        <div class="container text-center">
+            <span>© {{ now|date:'Y' }} FakeNewsHunter. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Show spinner on form submit
+    document.addEventListener('DOMContentLoaded', function() {
+        var forms = document.querySelectorAll('form');
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function() {
+                var overlay = document.getElementById('spinner-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        });
+        // Show Bootstrap toasts automatically
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        toastElList.forEach(function(toastEl) {
+            new bootstrap.Toast(toastEl, {delay: 4000}).show();
+        });
+    });
+    </script>
+</body>
+</html> 

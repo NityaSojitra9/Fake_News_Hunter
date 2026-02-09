@@ -1,0 +1,15 @@
+Django>=4.0
+newspaper3k
+scikit-learn
+joblib
+nltk
+spacy
+textblob
+beautifulsoup4
+requests
+pandas
+psycopg2-binary ; platform_system != 'Windows'
+# For PDF export (bonus)
+xhtml2pdf 
+PyPDF2
+Pillow 

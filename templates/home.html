@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}FakeNewsHunter - Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-info mb-4">
+            <h5 class="alert-heading">Welcome back, {{ user.profile.display_name }}!</h5>
+            <p class="mb-0">Ready to analyze another article? Your analysis history is saved and accessible from your profile.</p>
+        </div>
+
+        {% if user.is_staff or user.is_superuser %}
+        <!-- Admin users see admin-focused content -->
+        <div class="card shadow-lg p-4">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0">Admin Portal</h2>
+                <p class="mb-0">Manage and monitor the FakeNewsHunter platform</p>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead mb-4">Welcome to the admin interface. Use the navigation above to access administrative features.</p>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="fas fa-tachometer-alt mb-2"></i><br>
+                            Dashboard
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'admin_analyses' %}" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="fas fa-chart-bar mb-2"></i><br>
+                            All Analyses
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="{% url 'admin_users' %}" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="fas fa-users mb-2"></i><br>
+                            User Management
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Regular users see the analyze article form -->
+        <div class="card shadow-lg p-4">
+            <div class="card-header bg-primary text-white text-center">
+                <h2 class="mb-0">FakeNewsHunter</h2>
+                <p class="mb-0">Check the credibility of news articles using AI</p>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.url.label_tag }}
+                        {{ form.url }}
+                        {% if form.url.errors %}
+                            <div class="text-danger">
+                                {{ form.url.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="text-center mb-2">or</div>
+                    <div class="mb-3">
+                        {{ form.file.label_tag }}
+                        {{ form.file }}
+                        {% if form.file.errors %}
+                            <div class="text-danger">
+                                {{ form.file.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Analyze Article</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
